@@ -1,17 +1,17 @@
 version: '3.8'
 
-igo_by:
+en_passant:
   restart: "no"
   volumes:
-    - './opt/igo_by:z'
+    - './opt/en_passant:z'
   ports:
-    - '${BY_API_PORT_EXTERNAL}:8080'
+    - '${PASSANT_API_PORT_EXTERNAL}:8080'
     
 volumes:
-  igo-by-db-data:
-    name: igo_by_db_data_${DEPLOY_ENV}
+  en-passant-db-data:
+    name: en_passant_db_data_${DEPLOY_ENV}
     driver: local
     driver_opts:
       o: bind
       type: none
-      device: "./data/by-volume-${DEPLOY_ENV}"
+      device: "./data/passant-volume-${DEPLOY_ENV}"

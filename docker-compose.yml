@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  igo_by:
+    build:
+      context: .
+    image: 'igo/by:${I_GO_BY_LABEL}'
+    container_name: 'igo_by_${DEPLOY_ENV}'
+    restart: 'unless-stopped'
+    environment:
+      BY_FLASK_DEBUG: "${BY_FLASK_DEBUG}"
+      OTHER_ENV_VARIABLES: "${ENV_GO_HERE}"
+    expose:
+      - 8080
+    networks:
+      - igo-net
+      
+networks:
+  igo-net:
+    name: igo_net_${DEPLOY_ENV}

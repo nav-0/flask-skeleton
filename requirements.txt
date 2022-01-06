@@ -1,0 +1,10 @@
+flask==1.1.2
+flask-restful
+flasgger
+CherryPy
+requests
+python-dotenv
+base58
+flask-pymongo
+pymongo
+pandas

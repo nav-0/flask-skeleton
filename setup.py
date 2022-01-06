@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 API_VERSION = 'v1'
 
 setup(
-  name='i_go_by',
+  name='en_passant',
   version=API_VERSION,
   description='we all have a part to play',
   author='nav-0',
@@ -29,10 +29,10 @@ setup(
   },
   entry_points={
     'console_scripts': [
-      'i_go_by_api = i_go_by.__main__:main_api',
-      'i_go_by_client = i_go_by.__main__:main_client',
-      'i_go_by_cli = i_go_by.__main__:main_cli',
-      'i_go_by_something_else_i_do = i_go_by.__main__:something_else_i_do',
+      'en_passant_api = en_passant.__main__:main_api',
+      'en_passant_client = en_passant.__main__:main_client',
+      'en_passant_cli = en_passant.__main__:main_cli',
+      'en_passant_something_else_i_do = en_passant.__main__:something_else_i_do',
     ]
   },
 )

@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  en_passant:
+    ports:
+      - "${PASSANT_API_PORT_EXTERNAL}:8080"
+
+volumes:
+  en-passant-db-data:
+    name: en_passant_db_data_${DEPLOY_ENV}
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: "/mnt/builder/passant-volume-${DEPLOY_ENV}"

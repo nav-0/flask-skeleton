@@ -27,7 +27,7 @@ Running the container will start on API on port 8080
 
 ## Library
 * `pip install -U -e .[dev]`
-* export PASSANT_FLASK+DEBUG=true`
+* `export PASSANT_FLASK+DEBUG=true`
 * `en_passant_api` run API locally for testing
 * Visit the API Swagger UI at `scheme://host:port/en/api/v1.0/passant/apidocs`
 

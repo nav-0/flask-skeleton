@@ -180,8 +180,3 @@ class MoveApi(Resource):
     # last opportunity to exit cleanly
     logger.info('Goodbye.')
     return 0
-  
-    
-              
-              
-    

@@ -72,5 +72,116 @@ class MoveApi(Resource):
               items:
                 type: string
               description: Array of column, number. 
+            piece:
+              type: array
+              items:
+                type: string
+              description: Array of column, number.
+    responses:
+      201:
+        description: An en passant capture. 
+        schema: 
+          id: en-capture
+          properties:
+            capturedpiece:
+              type: object
+              description: Captured piece with its move history.
+    """
+    return self.get(None)
+  
+  def get(self, square=None, piece=None):
+    """Given a piece and a destination square, make an en passant capture and return captured piece. 
+    ---
+    produces:
+      - application/json
+    tags:
+      - move
+    parameters:
+      - in: query
+        name: square
+        type: array
+        items: 
+          type: string
+        required: true
+        description: The destination square.
+      - in: query
+        name: piece
+        type: array
+        items: 
+          type: string
+        required: true
+        description: En passanter (passantor?).
+    responses:
+      201:
+        description: Capture piece en passant. 
+        schema:
+          id: en-capture
+          properties:
+            capturedpiece:
+              type: object
+              description: Captured peice with its move history.
+    """
+    req_body = request.get_json(force=True, silent=True)
+    if not req_body:
+      req_body = {}
+    req_values = request.values
+    square = req_body.get('square', req_values.get('square', square))
+    piece = req_body.get('piece', req_values.get('piece', piece))
+    # validations galore
+    mover = Mover()
+    try:
+      capture = mover.move(square, piece)
+    except BaseException as exc:
+      logger.error('Mover had an issue.')
+      return resp_error('Something went wrong %s' % str(exc))
+    if not capture:
+      return resp_error("Nothing captured.")
+    return resp_success(capture)
+  
+  def run_passant_service(host=None, port=None):
+    if not host:
+      host = config.passant_host_bind
+    if not port:
+      port = config.passant_port_bind
+    logger.info('Starting en passant service at $%s:%s', host, port)
+    app = Flask(__name__)
+    app.debug = config.passant_flask_debug
+    if app.debug:
+      logger.info('Server in debug mode.')
+    api_version = '1.0'
+    dispatch_path = '/en/api/v%s/passant/' % api_version
+    dispatcher = PathInfoDispatcher({dispatch_path: app})
+    server = wsgiserver((host, port), dispatcher)
+    api = Api(app)
+    app.config['SWAGGER'] = {
+      'title': 'En Passant API',
+      'basePath': dispatch_path,
+      'version': api_version,
+    }
+    app.config['JSON_SORT_KEYS'] = False # retain resp key order
+    swagger = Swagger(app)
+    logger.info('Swagger available at %s' % '/'.join([x.rstrip('/') for x in [dispatch_path, 'apidocs']]))
+    api.add_resource(
+      MoveApi, 
+      '/move',
+      methods=['POST'],
+      endpoint='moves')
+    api.add_resource(
+      MoveApi,
+      '/move', # if params weren't arrays and say, strings, this would be /move/<param>
+      methods=['GET'],
+      endpoint='move')
+    api.init_app(app)
+    try:
+      server.start()
+    except KeyboardInterrupt:
+      logger.info('Shutting down...')
+      server.stop()
+    # last opportunity to exit cleanly
+    logger.info('Goodbye.')
+    return 0
+  
+    
+              
               
     

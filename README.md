@@ -13,7 +13,9 @@ This skeleton code can be used for:
 ## API Install
 
 Use the Dockerfile or docker-compose, use the `dev.env` template to make your `.env`
-Running the container will start on API on port 8080
+
+Running the container will start an API on port 8080
+
 `./rundmc` will handle starting the container
 
 ## Python Client
